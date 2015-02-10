@@ -20,13 +20,11 @@ $git_root =~ s/^\s+//;
 $git_root =~ s/\s+$//;
 chdir($git_root) or die "$!";
 
-my ($oldrev, $newrev) = @ARGV;
+my $oldrev = $ARGV[0];
+my @args = @ARGV[1 .. $#ARGV];
 $oldrev ||= 'HEAD';
-if ($newrev) {
-	open($diff, '-|', 'git', '--no-pager', 'diff', $oldrev, $newrev) or die;
-} else {
-	open($diff, '-|', 'git', '--no-pager', 'diff', $oldrev) or die;
-}
+
+open($diff, '-|', 'git', '--no-pager', 'diff', $oldrev, @args) or die;
 
 my ($pre, $post);
 my $filename;
